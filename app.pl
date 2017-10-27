@@ -34,13 +34,13 @@ my $projects = {
 get '/' => sub {
     my $c = shift;
 
-    my %all = map { $_ => { project_data($_) } } keys %$projects;
+    my @projects = sort keys %$projects;
 
-    $c->stash(service_data => \%all);
+    $c->stash(projects => \@projects);
     $c->render;
 } => 'index';
 
-get '/:project' => sub {
+get '/p/:project' => sub {
     my $c = shift;
 
     my $pdata = project_data($c->param('project'));
@@ -115,6 +115,8 @@ __DATA__
         <link rel="stylesheet" href="/normalize.css">
         <link rel="stylesheet" href="/skeleton.css">
         <link rel="stylesheet" href="/app.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/app.js"></script>
     </head>
     <body>
         <div class="container">
@@ -147,39 +149,20 @@ __DATA__
             </section>
             <section>
                 <h1>Projects</h1>
-                % for my $project (sort keys $service_data->%*) {
-                    % my $pdata = $service_data->{$project};
-
+                % for my $project (@$projects) {
                     <article class="project">
-                        % if ($pdata->{url}) {
-                            <a href="<%= $pdata->{url} %>">
-                                <h2 class="field field-name"><%= $project %></h2>
-                            </a>
-                        % } else {
-                            <h2 class="field field-name"><%= $project %></h2>
-                        % }
+                        <h2 class="field field-name"><%= $project %></h2>
 
-                        % if (!$pdata->{services}->@*) {
-                            No containers?
-                        % }
-                        % for my $service ($pdata->{services}->@*) {
-                        <div class="service record record-service row">
+                        <div class="loading"></div>
+                        <div class="service record record-service row template">
                             <div class="field field-container-name seven columns">
-                                <%= $service->{container} %>
                             </div>
-                            <div class="field field-container-status
-                                two columns
-                                <%= $service->{up} ? "up" : "not-up" %>"
-                            >
-                                <%= $service->{up} ? "Up" : "Not Up" %>
+                            <div class="field field-container-status two columns" >
                             </div>
-                            <div class="three columns">
-                                <a href="<%= $service->{url} %>"
-                                    class="<%= $service->{up} ? "up" : "not-up" %>"
-                                ><%= $service->{url} %></a>
+                            <div class="three columns field-url">
+                                <a></a>
                             </div>
                         </div>
-                        % }
                     </article>
                 % }
             </section>
