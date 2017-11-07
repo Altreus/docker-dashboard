@@ -29,6 +29,10 @@ my $projects = {
         dir => '/home/alastair.mcgowan/src/Aquarius/Aquarius-docker/compose/aquarius',
         services => [qw/aquarius openerp smtp/],
     },
+    "RFUTY" => {
+        dir => '/home/alastair.mcgowan/src/token-processor/TokenProcessor-docker/compose/tokenprocessor',
+        services => [qw/admin/],
+    },
 };
 
 get '/' => sub {
