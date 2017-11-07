@@ -4,7 +4,7 @@ use YAML::XS qw/LoadFile/;
 use Hash::Merge qw/merge/;
 use List::Gather;
 use File::chdir;
-use Capture::Tiny qw/capture_stdout/;
+use Capture::Tiny qw/capture_stdout capture/;
 use List::Util qw/first/;
 use v5.24;
 
@@ -43,8 +43,31 @@ get '/' => sub {
 get '/p/:project' => sub {
     my $c = shift;
 
-    my $pdata = project_data($c->param('project'));
+    my $project = $c->param('project');
+    exists $projects->{$project} or return $c->render(template => 'does_not_exist');
+
+    my $pdata = project_data($project);
     $c->render( json => $pdata );
+};
+
+post '/p/:project/docker' => sub {
+    my $c = shift;
+
+    my $project = $c->param('project');
+
+    exists $projects->{$project} or return $c->render(template => 'does_not_exist');
+
+    my $up_or_down = $c->param('up_or_down');
+    local $CWD = $projects->{$project}->{dir};
+
+    if ($up_or_down eq 'Up') {
+        capture { system qw/docker-compose --no-ansi up -d/ };
+    }
+    else {
+        capture { system qw/docker-compose --no-ansi stop/ };
+    }
+
+    $c->redirect_to('/');
 };
 
 my @dockerfile_order = qw/
