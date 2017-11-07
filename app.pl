@@ -8,32 +8,9 @@ use Capture::Tiny qw/capture_stdout capture/;
 use List::Util qw/first/;
 use v5.24;
 
-my $projects = {
-    "Code4Health" => {
-        url => 'https://opusvl-intranet/wiki/index.php/NHS_England_Code4Health_(C4H)_Infrastructure',
-        dir => '/home/alastair.mcgowan/src/Code4Health/C4H-Docker/compose/c4h',
-        services => [qw/admin user/],
-    },
-    "PREM" => {
-        url => 'https://opusvl-intranet/wiki/index.php/PREM_Staging_Infrastructure',
-        dir => '/home/alastair.mcgowan/src/PREM-FB11-CMS/PREM-docker/compose/prem-fb11',
-        services => [qw/admin website/],
-    },
-    "BCA" => {
-        url => 'https://opusvl-intranet/wiki/index.php/BCA_Infrastructure',
-        dir => '/home/alastair.mcgowan/src/dvla/BCA/BCA-docker/compose/bca',
-        services => [qw/pulsar odoo nginx/],
-    },
-    "Aquarius" => {
-        url => 'https://opusvl-intranet/wiki/index.php/Category:Aquarius',
-        dir => '/home/alastair.mcgowan/src/Aquarius/Aquarius-docker/compose/aquarius',
-        services => [qw/aquarius openerp smtp/],
-    },
-    "RFUTY" => {
-        dir => '/home/alastair.mcgowan/src/token-processor/TokenProcessor-docker/compose/tokenprocessor',
-        services => [qw/admin/],
-    },
-};
+plugin 'Config';
+
+my $projects = app->config('projects');;
 
 get '/' => sub {
     my $c = shift;
