@@ -9,7 +9,7 @@
     </head>
     <body>
         <div class="container">
-            <h1>Al's computer. Go away.</h1>
+            <h1><%= title %></h1>
             <section class="row">
                 <h1>Search</h1>
                 <article class="seven columns">

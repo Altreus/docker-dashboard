@@ -17,6 +17,7 @@ get '/' => sub {
 
     my @projects = sort keys %$projects;
 
+    $c->stash(title => $c->config('title'));
     $c->stash(projects => \@projects);
     $c->render;
 } => 'index';
