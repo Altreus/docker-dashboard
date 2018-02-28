@@ -24,7 +24,7 @@
                     
                     <h2>Tracker</h2>
                     <div class="row">
-                        <form method="get" action="https://secure.opusvl.com/support/view.php">
+                        <form method="get" action="https://tracker.opusvl.com/view.php">
                             <input name="id" type="number" increment="1" class="eight columns" />
                             <input type="submit" value="Go" class="four columns" />
                         </form>
