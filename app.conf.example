@@ -1,0 +1,59 @@
+{
+    title => "Al's computer. Go away.",
+    projects => {
+        "Code4Health" => {
+            url => 'https://opusvl-intranet/wiki/index.php/NHS_England_Code4Health_(C4H)_Infrastructure',
+            dir => '/home/alastair.mcgowan/src/Code4Health/C4H-Docker/compose/c4h',
+            services => [qw/admin user/],
+        },
+        "PREM" => {
+            url => 'https://opusvl-intranet/wiki/index.php/PREM_Staging_Infrastructure',
+            dir => '/home/alastair.mcgowan/src/PREM-FB11-CMS/PREM-docker/compose/prem-fb11',
+            services => [qw/admin website mail/],
+        },
+        "BCA" => {
+            url => 'https://opusvl-intranet/wiki/index.php/BCA_Infrastructure',
+            dir => '/home/alastair.mcgowan/src/dvla/BCA/BCA-docker/compose/bca',
+            services => [qw/pulsar odoo nginx smtp/],
+        },
+        "Aquarius" => {
+            url => 'https://opusvl-intranet/wiki/index.php/Category:Aquarius',
+            dir => '/home/alastair.mcgowan/src/Aquarius/Aquarius-docker/compose/aquarius',
+            services => [qw/aquarius openerp smtp/],
+        },
+        "RFUTY" => {
+            dir => '/home/alastair.mcgowan/src/token-processor/TokenProcessor-docker/compose/tokenprocessor',
+            services => [qw/admin/],
+        },
+        "LDAP Admin" => {
+            dir => '/home/alastair.mcgowan/src/fb11ldapadmin/OpusVL-FB11-LDAPAdmin',
+            services => [qw/ldapadmin/],
+        },
+        "FB11 Demo" => {
+            dir => '/home/alastair.mcgowan/src/FB11-Demo',
+            services => [qw/fb11-demo/],
+        },
+        "FB11 Token Processor" => {
+            dir => '/home/alastair.mcgowan/src/token-processor/OpusVL-FB11-TokenProcessor',
+            services => [qw/tokenprocessor/],
+        },
+        "Phoenix" => {
+            dir => '/home/alastair.mcgowan/src/Phoenix/Phoenix',
+            services => [qw/phoenix website/],
+        },
+        "PREM Loyalty" => {
+            dir => '/home/alastair.mcgowan/src/token-processor/PREM-TokenProcessor',
+            services => [qw/tokenprocessor/],
+        },
+        "SoLT FB11" => {
+            dir => '/home/alastair.mcgowan/src/SoLT-FB11/SoLT-FB11',
+            services => [qw/solt-fb11/],
+        },
+        "OpusVL CMS" => {
+            dir => '/home/alastair.mcgowan/src/FB11-CMS/CMS-docker/compose/opusvl',
+            services => [qw/admin website/],
+        },
+    }
+}
+
+;
