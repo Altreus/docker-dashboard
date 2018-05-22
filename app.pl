@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
-use YAML::XS qw/LoadFile/;
+use YAML::XS qw/LoadFile Load/;
 use Hash::Merge qw/merge/;
 use List::Gather;
 use File::chdir;
@@ -69,7 +69,15 @@ sub project_data {
     my $service_data = [ gather {
         for my $s ($projects->{$project}->{services}->@*) {
             my $ports = $config->{$s}->{ports}->[0];
-            my ($p) = split /:/, $ports;
+
+            my $p;
+
+            if (ref $ports) {
+                $p = $ports->{published};
+            }
+            else {
+                ($p) = split /:/, $ports;
+            }
 
             my $ps = first { $_->[0] =~ /${s}_\d/ } @ps;
             next unless $ps;
@@ -81,7 +89,7 @@ sub project_data {
             };
         }
     }];
-    
+
     return (
         url => $projects->{$project}->{url},
         services => $service_data
@@ -92,10 +100,23 @@ sub merge_yamls {
     my $dir = shift;
 
     my $config = {};
-    for my $f (@dockerfile_order) {
-        next unless -f "$dir/$f";
-        my $c = LoadFile("$dir/$f");
-        $config = merge( $config, $c->{services} );
+
+    local $CWD = $dir;
+
+    my $docker_config = capture_stdout {
+        system qw/docker-compose config/
+    };
+
+    if ($docker_config) {
+        $config = Load($docker_config);
+        $config = $config->{services} if $config;
+    }
+    else {
+        for my $f (@dockerfile_order) {
+            next unless -f "$dir/$f";
+            my $c = LoadFile("$dir/$f");
+            $config = merge( $config, $c->{services} );
+        }
     }
 
     return $config;
